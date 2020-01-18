@@ -1,0 +1,24 @@
+{
+  "name": "nodejspractice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hareshaprajapati/nodeJSPractice.git"
+  },
+  "author": "Haresh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hareshaprajapati/nodeJSPractice/issues"
+  },
+  "homepage": "https://github.com/hareshaprajapati/nodeJSPractice#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
