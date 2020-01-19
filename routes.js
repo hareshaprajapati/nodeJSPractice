@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+// in details how to manualy handle request and response
+
 const requestListenerCallback = (req, res) => {
     // console.log(req.url, '\n' , req.method, '\n' , req.headers);
     // process.exit(); // quit event loop
