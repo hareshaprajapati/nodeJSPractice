@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+// register view engine
 app.set('view engine', 'ejs');
+// register views folder 
 app.set('views', 'views');
 
 const adminData = require('./routes/admin');
