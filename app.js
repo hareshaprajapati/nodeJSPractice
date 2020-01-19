@@ -14,13 +14,13 @@ app.set('view engine', 'ejs');
 // register views folder 
 app.set('views', 'views');
 
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({extended: false})); // extended for parse non default features, bodyParser to get request.body
 app.use(express.static(path.join(__dirname,'public'))); // forward request to public static folder 
 
-app.use('/admin',adminData.routes);
+app.use('/admin',adminRoutes.routes);
 app.use(shopRoutes); 
 
 // if no routes found then send 404 page
