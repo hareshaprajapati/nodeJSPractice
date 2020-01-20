@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const errorController = require('./controllers/error');
 
 // const db = require('./util/database');
+const sequelize = require('./util/database');
 
 
 const app = express();
@@ -40,7 +41,12 @@ app.use('/', errorController.get404);
 /* const server = http.createServer(app)
 server.listen(3000); */
 
-app.listen(3000);
+sequelize.sync()
+.then(res => {
+    app.listen(3000);
+})
+.catch(err => console.log(err));
+
 
 
 // const routes = require('./routes')
