@@ -14,6 +14,8 @@ const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 const app = express();
 
@@ -38,6 +40,7 @@ app.use((req,res,next) => {
     User.findByPk(1)
     .then(user => {
         req.user = user;
+        console.log(req.url);
         next();
     })
     .catch(err => console.log(err));
@@ -61,15 +64,19 @@ User.hasOne(Cart); // will add userId in Cart table
 // Cart.belongsTo(User); // optional
 
 Cart.belongsToMany(Product, {through: CartItem});
-Product.belongsToMany(Cart, {through: CartItem});
+Product.belongsToMany(Cart, {through: CartItem}); // 
 
+Order.belongsTo(User);
+User.hasMany(Order);
+
+Order.belongsToMany(Product, { through: OrderItem});
+Product.belongsToMany(Order, { through: OrderItem});
 
 sequelize
     // .sync({ force: true})
     .sync()
     .then(res => {
         return User.findByPk(1);
-
     })
     .then(user => {
         if (!user) {
@@ -77,11 +84,17 @@ sequelize
         }
         return user;
         // return Promise.resolve(user); // no need resturn Promise.resolve because anything return from then block will always be Promise
-
     })
     .then(user => {
-        return user.createCart();
-        
+        user.getCart()
+        .then(cart => {
+            if(!cart) {
+                return user.createCart();
+            } else {
+                return cart;
+            }
+        })
+       
     })
     .then(cart => {
         app.listen(3000);
