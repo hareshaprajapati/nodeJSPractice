@@ -1,4 +1,64 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
+
+const getDB = require('../util/database').getDB;
+
+class Product {
+  constructor(title, price, imageURL, description, id, userId) {
+    this.title = title;
+    this.price = price;
+    this.imageURL = imageURL;
+    this.description = description;
+    if(id){
+      this._id = new mongodb.ObjectID(id);
+    }
+   this.userId = userId;
+  }
+
+  save() {
+    const db = getDB();
+    let dbOP;
+    if(this._id){
+      // update docuemnt
+      dbOP = db.collection('products').updateOne({_id: this._id}, {$set : this});
+      // dbOP = db.collection('products').updateOne({_id: this._id}, {$set : {title: this.title, price: this.price}});
+    }else{ // create new one
+      dbOP = db.collection('products').insertOne(this);
+    }
+    return dbOP
+      .then(result => {
+      })
+      .catch(err => console.log(err));
+    // db.collection('products').insertMany([])
+  }
+
+  static findAll() {
+    // find return cursor then we need to do pagination because of million of records
+    return getDB().collection('products').find().toArray()
+      .then(products => {
+        return products;
+      })
+      .catch(err => console.log(err)); 
+    // return db.collection('products').find({title: 'test'});
+  }
+
+  static findById(prodID){
+    // mongodb store _id as a object of ObjectID()
+    return getDB().collection('products').find({_id: new mongodb.ObjectId(prodID)}).next()
+      .then(product => {
+        return product;
+      })
+      .catch(err => console.log(err)); 
+  }
+
+  static deleteById(prodID){
+    return getDB().collection('products').deleteOne({_id: new mongodb.ObjectId(prodID)}) 
+    .then(product => {
+    })
+    .catch(err => console.log(err)); 
+  }
+
+}
+/* const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
@@ -16,7 +76,7 @@ const Product = sequelize.define('product', {
   },
   imageURL: Sequelize.STRING,
   description: Sequelize.STRING
-});
+}); */
 
 module.exports = Product;
 
